@@ -6,7 +6,7 @@ contract ApprovalContract {
   // }
   address public sender;
   address public receiver;
-  address public constant approver = ;
+  address public constant approver = 0xa588738615d8aA08628c77d86C88EF26aBd7FC6a;
 
   function deposit(address _receiver) external payable{
     require(msg.value > 0);
@@ -20,7 +20,7 @@ contract ApprovalContract {
 
   function approve() external {
     require(msg.sender == approver);
-    receiver.transfer(address(this).balance)
+    receiver.transfer(address(this).balance);
   }
 
 
