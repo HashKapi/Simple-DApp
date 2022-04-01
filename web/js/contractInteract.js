@@ -1,7 +1,9 @@
 // const {abi} = require('js/contractAbi')
 
 if(typeof web3 != "undefined"){
-    web3 = new Web3(web3.currentProvider)
+    // web3 = new Web3(window.web3.currentProvider)
+    web3 = new Web3(window.ethereum)
+    console.log('your web3', web3)
 }else{
     web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:7545"))
 }
@@ -39,6 +41,8 @@ $('#contract-form').submit(function (){
         return
     }
 
+    console.log('from', typeof fromAddress, fromAddress)
+    console.log('to', typeof toAddress, toAddress)
     ApprovalContract.methods.deposit(toAddress).send(
         {from: fromAddress, gas: 100000, value: web3.utils.toWei(amount,'ether')},
         function(error, result){
@@ -70,13 +74,28 @@ $('#get-balance-form').submit(function() {
 $('#approve-form').submit(function(){
     event.preventDefault()
 
-    ApprovalContract.methods.approve().call({from: '0xa8Ab4262dD72071d67D2BfeDCA3a95Bf45E9Aa24'},
+    ApprovalContract.methods.approve().call({from: '0xa588738615d8aA08628c77d86C88EF26aBd7FC6a'},
         function(error, result){
             if(error){
                 console.log('error: ' + error)
             }else{
                 console.log('result: ' + JSON.stringify(result))
                 $('#approval-display').html('Transaction approved. TX: <b>' + result + '<b>')
+            }
+        }
+    )
+})
+
+$('#approver-form').submit(function(){
+    event.preventDefault()
+
+    ApprovalContract.methods.viewApprover().call(
+        function(error, result){
+            if(error){
+                console.log('error: ' + error)
+            }else{
+                console.log('result: ' + JSON.stringify(result))
+                $('#approver-display').html('Transaction approved. TX: <b>' + result + '<b>')
             }
         }
     )
